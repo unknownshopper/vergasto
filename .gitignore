@@ -1,0 +1,39 @@
+# Ignore bundler config
+/.bundle
+# Ignore all logfiles and tempfiles
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+
+# Ignore master key for decrypting credentials
+/config/master.key
+
+# Ignore environment variables
+.env
+
+# Ignore database config
+/config/database.yml
+
+# Ignore node modules
+/node_modules
+
+# Ignore yarn files
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore coverage files
+/coverage/*
+
+# Ignore public uploads
+/public/uploads

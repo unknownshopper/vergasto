@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
+  <div class="container">
+    <%= link_to "Vergasto", root_path, class: "navbar-brand text-primary fw-bold" %>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <%= link_to "Gastos", transactions_path, class: "nav-link #{current_page?(transactions_path) ? 'active' : ''}" %>
+      </ul>
+      
+      <div class="d-flex align-items-center gap-3">
+        <%= link_to new_transaction_path, class: "btn btn-primary" do %>
+          <i class="bi bi-plus-circle me-2"></i>Nuevo Gasto
+        <% end %>
+        
+        <span class="text-muted">
+          <i class="bi bi-person-circle me-2"></i><%= current_user.full_name %>
+        </span>
+        
+        <%= button_to destroy_user_session_path, 
+            method: :delete, 
+            class: "btn btn-outline-danger",
+            form: { data: { turbo: true } } do %>
+          <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

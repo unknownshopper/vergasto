@@ -1,0 +1,38 @@
+<div class="container">
+  <%= form_with(model: transaction, class: "card p-4 shadow-sm") do |form| %>
+    <% if transaction.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% transaction.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :full_name, class: "Operador" %>
+      <%= form.text_field :full_name, class: "form-control", readonly: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, "Descripción", class: "form-label" %>
+      <%= form.text_area :description, class: "form-control", rows: 3, placeholder: "Describe el gasto..." %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :amount, "Monto", class: "form-label" %>
+      <%= form.number_field :amount, class: "form-control", step: "0.01" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :image, "Comprobante", class: "form-label" %>
+      <%= form.file_field :image, class: "form-control" %>
+    </div>
+
+    <div class="d-flex gap-2">
+      <%= form.submit "Guardar", class: "btn btn-primary" %>
+      <%= link_to "Cancelar", transactions_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,103 @@
+<div class="container py-4">
+  <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="display-5 fw-bold text-primary mb-0">Control de Gastos</h1>
+      <p class="text-muted">Gestión financiera simplificada</p>
+    </div>
+    
+    <%= form_tag transactions_path, method: :get, class: "d-flex gap-2" do %>
+      <%= select_month(@selected_month, 
+          { use_month_names: %w[Enero Febrero Marzo Abril Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre],
+            field_name: 'month' },
+          { class: "form-select", onchange: "this.form.submit()" }) %>
+      <%= select_year(@selected_year, 
+          { start_year: 2020, end_year: Date.today.year,
+            field_name: 'year' },
+          { class: "form-select", onchange: "this.form.submit()" }) %>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <% @transactions.each do |transaction| %>
+      <div class="col-12">
+        <div class="card mb-3 shadow-sm">
+          <div class="row g-0">
+            <div class="col-auto p-3">
+              <% if transaction.image.attached? %>
+                <%= image_tag transaction.image, class: "rounded-3", style: "width: 100px; height: 100px; object-fit: cover;" %>
+              <% else %>
+                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                  <i class="bi bi-receipt text-muted" style="font-size: 2rem;"></i>
+                </div>
+              <% end %>
+            </div>
+            <div class="col d-flex align-items-center">
+              <div class="card-body py-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-1"><%= transaction.full_name %></h5>
+                  <span class="badge bg-success rounded-pill fs-5">
+                    $<%= number_with_precision(transaction.amount, precision: 2, delimiter: ',') %>
+                  </span>
+                </div>
+                <p class="text-muted mb-2"><%= transaction.description %></p>
+                <p class="text-muted small mb-2">
+                  <i class="bi bi-calendar3 me-1"></i>
+                  <%= transaction.created_at.strftime("%d %b, %Y") %>
+                </p>
+                <div class="btn-group btn-group-sm">
+                  <%= link_to transaction, class: "btn btn-outline-secondary" do %>
+                    <i class="bi bi-eye me-1"></i>Ver
+                  <% end %>
+                  <%= link_to edit_transaction_path(transaction), class: "btn btn-outline-secondary" do %>
+                    <i class="bi bi-pencil me-1"></i>Editar
+                  <% end %>
+                  <% if current_user.admin? %>
+                    <%= button_to transaction, method: :delete, class: "btn btn-outline-danger", form: { data: { turbo_confirm: '¿Estás seguro?' } } do %>
+                      <i class="bi bi-trash me-1"></i>Eliminar
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @transactions.any? %>
+    <div class="card mt-4 border-0 bg-gradient shadow">
+      <div class="card-body p-4">
+        <div class="row align-items-center">
+          <div class="col">
+            <h3 class="text-primary mb-0">Total Gastado</h3>
+            <p class="text-muted mb-0">Suma de todas las transacciones</p>
+          </div>
+          <div class="col-auto">
+            <h2 class="display-6 fw-bold text-primary mb-0">
+              $<%= number_with_precision(@transactions.sum(:amount), precision: 2, delimiter: ',') %>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @transactions.empty? %>
+    <div class="text-center py-5">
+      <i class="bi bi-receipt display-1 text-muted mb-3 d-block"></i>
+      <h3 class="text-muted">No hay gastos registrados</h3>
+      <p class="text-muted mb-4">Comienza registrando tu primer gasto</p>
+      <%= link_to new_transaction_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-circle me-2"></i>Crear nuevo gasto
+      <% end %>
+    </div>
+  <% end %>
+</div>
